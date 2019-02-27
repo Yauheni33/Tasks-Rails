@@ -7,6 +7,7 @@
 
 
 #App & Flow
+
 This is a single user application. When a user gets to the task page (home page) she/he should be able to see a list of all her/his tasks.
 There is a form with one field (name) to add a new task to the list, the task is added to the end of the list without page reload (please see the screenshot).
 The user is able to mark a task as complete by clicking on the checkbox located on the right side of the page. It will be great if the process of task completion should be asynchronous (AJAX).
