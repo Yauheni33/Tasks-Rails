@@ -1,4 +1,4 @@
-#Requirements
+Requirements:
 * Rails 5+
 * Ruby 2.4+
 * Slim/HAML
@@ -6,7 +6,7 @@
 * jQuery / React / Angular
 
 
-#App & Flow
+App & Flow
 
 This is a single user application. When a user gets to the task page (home page) she/he should be able to see a list of all her/his tasks.
 There is a form with one field (name) to add a new task to the list, the task is added to the end of the list without page reload (please see the screenshot).
