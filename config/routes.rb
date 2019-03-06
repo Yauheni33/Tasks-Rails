@@ -1,4 +1,4 @@
 Rails.application.routes.draw do
-  get 'task/index'
-  root 'task#index'
+  resource :tasks, only: [:index, :create]
+  root 'tasks#index'
 end

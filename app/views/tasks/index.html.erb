@@ -141,13 +141,14 @@
  
     
   <ul id="myUL">
-   <% @all_task["tasks"].each do |task| %>
-    <li class="<%= task["checked"] %>"><%=task["text"] %></li>
+   <% @all_task.each do |task| %>
+    <li class="<%= task.done %>"><%=task.text %></li>
     <% end %>
   </ul>
   <div id="myDIV" class="header">
     <input type="text" id="myInput" placeholder="Title...">
     <span onclick="newElement()" class="addBtn">Add</span>
+    <span onclick="addToDB()" class="addBtn">Load</span>
   </div>
 
 
@@ -211,22 +212,21 @@
       }
   </script>
   <script type="text/javascript">
-    window.onbeforeunload = function(){
+  function addToDB() {
       var myNodelist = document.getElementsByTagName("li");
       allNode = []
       Array.from(myNodelist).forEach((element) => {
         keyDownElement = Object.values(element.classList)
         index = keyDownElement.indexOf('checked')
         index != -1 ? keyDownElement = element.classList[index] : keyDownElement = ''
-        allNode.push({text: element.textContent.slice(0, -1), checked: keyDownElement})
+        allNode.push({text: element.textContent.slice(0, -1), done: keyDownElement})
       });
       $.ajax({
-        method: "GET",
-        url: "/",
+        method: "POST",
+        url: "/tasks",
         contentType: 'application/json; charset=utf-8',
-        data: {nodes : JSON.stringify(allNode)}
+        data: JSON.stringify({nodes : allNode})
       })
-      console.log('hu')
     }
   </script>
 
