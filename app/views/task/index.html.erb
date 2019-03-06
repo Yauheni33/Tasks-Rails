@@ -141,12 +141,9 @@
  
     
   <ul id="myUL">
-    <li>Hit the gym</li>
-    <li class="checked">Pay bills</li>
-    <li>Meet George</li>
-    <li>Buy eggs</li>
-    <li>Read a book</li>
-    <li>Organize office</li>
+   <% @all_task["tasks"].each do |task| %>
+    <li class="<%= task["checked"] %>"><%=task["text"] %></li>
+    <% end %>
   </ul>
   <div id="myDIV" class="header">
     <input type="text" id="myInput" placeholder="Title...">
@@ -172,7 +169,8 @@
       for (i = 0; i < close.length; i++) {
         close[i].onclick = function() {
           var div = this.parentElement;
-          div.style.display = "none";
+          div.remove()
+          //div.style.display = "none";
         }
       }
       
@@ -206,10 +204,30 @@
         for (i = 0; i < close.length; i++) {
           close[i].onclick = function() {
             var div = this.parentElement;
-            div.style.display = "none";
+            div.remove()
+            //div.style.display = "none";
           }
         }
       }
+  </script>
+  <script type="text/javascript">
+    window.onbeforeunload = function(){
+      var myNodelist = document.getElementsByTagName("li");
+      allNode = []
+      Array.from(myNodelist).forEach((element) => {
+        keyDownElement = Object.values(element.classList)
+        index = keyDownElement.indexOf('checked')
+        index != -1 ? keyDownElement = element.classList[index] : keyDownElement = ''
+        allNode.push({text: element.textContent.slice(0, -1), checked: keyDownElement})
+      });
+      $.ajax({
+        method: "GET",
+        url: "/",
+        contentType: 'application/json; charset=utf-8',
+        data: {nodes : JSON.stringify(allNode)}
+      })
+      console.log('hu')
+    }
   </script>
 
 
