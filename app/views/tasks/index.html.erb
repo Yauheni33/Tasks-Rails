@@ -148,7 +148,6 @@
   <div id="myDIV" class="header">
     <input type="text" id="myInput" placeholder="Title...">
     <span onclick="newElement()" class="addBtn">Add</span>
-    <span onclick="addToDB()" class="addBtn">Load</span>
   </div>
 
 
@@ -171,7 +170,8 @@
         close[i].onclick = function() {
           var div = this.parentElement;
           div.remove()
-          //div.style.display = "none";
+          textInElement = div.textContent.slice(0, -1)
+          request(textInElement, '', 'DELETE')
         }
       }
       
@@ -179,14 +179,20 @@
       var list = document.querySelector('ul');
       list.addEventListener('click', function(ev) {
         if (ev.target.tagName === 'LI') {
+          keyDownElement = Object.values(ev.target.classList)
           ev.target.classList.toggle('checked');
+          index = keyDownElement.indexOf('checked')
+          index != -1 ? keyDownElement = '' : keyDownElement = 'checked'
+          textInElement = ev.target.textContent.slice(0, -1)
+          request(textInElement, keyDownElement, 'PATCH')
         }
       }, false);
-      
+
       // Create a new list item when clicking on the "Add" button
       function newElement() {
         var li = document.createElement("li");
         var inputValue = document.getElementById("myInput").value;
+        request(inputValue, '', 'POST')
         var t = document.createTextNode(inputValue);
         li.appendChild(t);
         if (inputValue === '') {
@@ -210,24 +216,16 @@
           }
         }
       }
-  </script>
-  <script type="text/javascript">
-  function addToDB() {
-      var myNodelist = document.getElementsByTagName("li");
-      allNode = []
-      Array.from(myNodelist).forEach((element) => {
-        keyDownElement = Object.values(element.classList)
-        index = keyDownElement.indexOf('checked')
-        index != -1 ? keyDownElement = element.classList[index] : keyDownElement = ''
-        allNode.push({text: element.textContent.slice(0, -1), done: keyDownElement})
-      });
-      $.ajax({
-        method: "POST",
-        url: "/tasks",
-        contentType: 'application/json; charset=utf-8',
-        data: JSON.stringify({nodes : allNode})
-      })
-    }
+
+      function request(textInElement, done, method) {
+        node = [{text: textInElement, done: done}]
+        $.ajax({
+          method: method,
+          url: "/tasks",
+          contentType: 'application/json; charset=utf-8',
+          data: JSON.stringify({nodes : node})
+        })
+      }
   </script>
 
 

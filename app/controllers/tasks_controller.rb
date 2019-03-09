@@ -9,8 +9,17 @@ class TasksController < ApplicationController
     texts = params["nodes"]
     in_file = {:tasks => []}
     texts.each { |task| in_file[:tasks] << task.permit! }
-    Task.destroy_all
     Task.create(in_file[:tasks])
+  end
+
+  def update
+    field = Task.find_by(text: params["nodes"].first["text"])
+    field.update(done: params["nodes"].first["done"])
+  end
+
+  def destroy
+    field = Task.find_by(text: params["nodes"].first["text"])
+    field.destroy
   end
 
 end
